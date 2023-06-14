@@ -1,8 +1,5 @@
 from flask import Flask, request, jsonify
 import tensorflow as tf
-from pydantic import BaseModel
-from urllib.request import Request
-from fastapi import FastAPI, Response, UploadFile
 import traceback
 import predictloker
 
