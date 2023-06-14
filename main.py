@@ -1,12 +1,9 @@
 from flask import Flask, request, jsonify
 import tensorflow as tf
-import traceback
+import predictloker
 
 app = Flask(__name__)
 app.debug = True
-
-# Load model
-model = tf.keras.models.load_model('linear.h5')
 
 
 @app.route('/', methods=['GET'])
@@ -22,16 +19,13 @@ def predict_text():
         peminatan = req.get('peminatan')
 
         # Lakukan prediksi menggunakan model
-        prediction = model.predict([[keterampilan, peminatan]])
+        prediction = predictionloker.predict_loker(keterampilan, peminatan)
 
         output = {
-            "result": prediction.tolist()
+            "result": prediction
         }
 
         return jsonify(output)
-    except Exception as e:
-        traceback.print_exc()
-        return "Internal Server Error", 500
 
 
 if __name__ == '__main__':
