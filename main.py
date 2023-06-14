@@ -3,7 +3,7 @@ import tensorflow as tf
 
 app = Flask(__name__)
 
-# Load model kalian disini seperti pada kasus ini menggunakan model linear
+# Load model
 model = tf.keras.models.load_model('linear.h5')
 
 
@@ -17,13 +17,13 @@ def predict():
     # Get the input data from the request
     data = request.get_json()
 
-    # Lakukan Preprocess data terlebih dahulu jika ada
+    # Perform data preprocessing if needed
     data_predict = int(data["data"])
 
     # Make predictions using the loaded model
     predictions = model.predict([[data_predict]])
 
-    # Lakukan Postprocess data terlebih dahulu jika ada
+    # Perform data postprocessing if needed
     # ...
 
     # Return the predictions as a JSON response
