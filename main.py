@@ -1,7 +1,15 @@
 from flask import Flask, request, jsonify
 import tensorflow as tf
+from pydantic import BaseModel
+from urllib.request import Request
+from fastapi import FastAPI, Response, UploadFile
+import traceback
+import predictloker
+
 
 app = Flask(__name__)
+app.debug = True
+
 
 # Load model
 model = tf.keras.models.load_model('linear.h5')
@@ -12,22 +20,29 @@ def home():
     return "API is running!"
 
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    # Get the input data from the request
-    data = request.get_json()
+class RequestText(BaseModel):
+    text: str
 
-    # Perform data preprocessing if needed
-    data_predict = int(data["data"])
 
-    # Make predictions using the loaded model
-    predictions = model.predict([[data_predict]])
+@app.post("/predict")
+def predict_text():
+    try:
+        req = request.get_json()  # Mendapatkan data JSON dari permintaan
+        keterampilan = req.get('keterampilan')
+        peminatan = req.get('peminatan')
 
-    # Perform data postprocessing if needed
-    # ...
+        predict = predictloker.predict_loker(keterampilan, peminatan)
 
-    # Return the predictions as a JSON response
-    return jsonify(predictions.item())
+        output = {
+            "result": predict
+        }
+
+        return jsonify(output)
+    except Exception as e:
+        traceback.print_exc()
+        return "Internal Server Error", 500
+
+        return "Internal Server Error"
 
 
 if __name__ == '__main__':
