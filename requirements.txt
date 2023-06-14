@@ -1,7 +1,7 @@
-fastapi
+flask
+tensorflow
 pydantic
 uvicorn[standard]
 python-multipart
 numpy
 Pillow
-tensorflow
